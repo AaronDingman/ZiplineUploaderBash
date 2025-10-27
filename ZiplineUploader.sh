@@ -12,6 +12,10 @@ FILE_PATH="$SAVE_DIR/screenshot_${TIMESTAMP}.png"
 
 spectacle -o ${FILE_PATH} -ribn
 
+if [ ! -e ${FILE_PATH} ]; then
+        exit 0
+fi
+
 RESPONSE=$(curl \
   -H "authorization: $TOKEN" $URL \
   -F file=@${FILE_PATH} \

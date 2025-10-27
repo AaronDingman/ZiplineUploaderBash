@@ -1,13 +1,20 @@
 #!/bin/bash
 
 TOKEN=""
+
 URL=""
 
-spectacle -o /tmp/screenshot.png -ribn
+SAVE_DIR=""
+
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+
+FILE_PATH="$SAVE_DIR/screenshot_${TIMESTAMP}.png"
+
+spectacle -o ${FILE_PATH} -ribn
 
 RESPONSE=$(curl \
   -H "authorization: $TOKEN" $URL \
-  -F file=@/tmp/screenshot.png \
+  -F file=@${FILE_PATH} \
   -H 'content-type: multipart/form-data')
 
 
@@ -20,5 +27,5 @@ if [[ -z "$RESPONSE_URL" || "$RESPONSE_URL" == "null" ]]; then
 else
         echo -n "$RESPONSE_URL" | wl-copy
         echo "$RESPONSE_URL"
-        notify-send --app-name="Zipline Uploader" -i /tmp/screenshot.png "Uploaded successfully!" "<a href=\"${RESPONSE_URL}\">${RESPONSE_URL}</a>"
+        notify-send --app-name="Zipline Uploader" -i ${FILE_PATH} "Uploaded successfully!" "<a href=\"${RESPONSE_URL}\">${RESPONSE_URL}</a>"
 fi
